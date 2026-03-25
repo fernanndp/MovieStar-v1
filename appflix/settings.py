@@ -96,14 +96,21 @@ WSGI_APPLICATION = "appflix.wsgi.application"
 # =========================
 # BANCO DE DADOS
 # =========================
+database_url = os.getenv("DATABASE_URL")
+
+if DEBUG:
+    database_url = database_url or f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+else:
+    if not database_url:
+        raise RuntimeError("DATABASE_URL não encontrada no ambiente de produção.")
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    "default": dj_database_url.parse(
+        database_url,
         conn_max_age=600,
         conn_health_checks=True,
     )
 }
-
 # =========================
 # VALIDAÇÃO DE SENHA
 # =========================

@@ -1,0 +1,143 @@
+.review-page {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.movie-summary {
+    overflow: hidden;
+    position: sticky;
+    top: 95px;
+}
+
+.movie-summary-poster {
+    aspect-ratio: 2 / 3;
+    background: rgba(255,255,255,0.04);
+}
+
+.movie-summary-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.movie-summary-empty {
+    min-height: 420px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 1rem;
+}
+
+.movie-summary-body {
+    padding: 1.2rem;
+}
+
+.movie-summary-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.movie-summary-text {
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.review-card {
+    padding: 1.8rem;
+}
+
+.review-header {
+    margin-bottom: 1.5rem;
+}
+
+.review-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+}
+
+.review-subtitle {
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.field-group {
+    margin-bottom: 1.2rem;
+}
+
+.field-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.field-help {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-top: 0.45rem;
+}
+
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.2rem;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2.4rem;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+    transition: transform 0.15s ease, color 0.2s ease;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #facc15;
+    transform: scale(1.05);
+}
+
+.star-rating input:checked ~ label {
+    color: #facc15;
+}
+
+.actions {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,0.07);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+@media (max-width: 900px) {
+    .review-page {
+        grid-template-columns: 1fr;
+    }
+
+    .movie-summary {
+        position: static;
+    }
+}

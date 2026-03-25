@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Início | MovieStar{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="card hero-box">
+        <h1 class="hero-title">
+            Descubra, avalie e salve seus <span>filmes favoritos</span>
+        </h1>
+        <p class="hero-text">
+            Pesquise títulos, veja detalhes e registre suas opiniões em um só lugar.
+            Use a busca abaixo para encontrar um filme específico ou explore os filmes recentes.
+        </p>
+
+        <form method="get" class="search-form">
+            <input
+                type="text"
+                name="q"
+                class="search-input"
+                placeholder="Pesquisar filme por título..."
+                value="{{ request.GET.q|default:'' }}"
+            >
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+    </div>
+</section>
+
+<section>
+    <div class="section-head">
+        <div>
+            <h2 class="section-title">{{ mensagem }}</h2>
+            <p class="section-subtitle">
+                {% if request.GET.q %}
+                    Resultados encontrados para "{{ request.GET.q }}"
+                {% else %}
+                    Explore os títulos em destaque
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    {% if filmes %}
+        <div class="movies-grid">
+            {% for filme in filmes %}
+                <article class="card movie-card">
+                    <div class="movie-poster-wrap">
+                        {% if filme.poster_path %}
+                            <img
+                                src="https://image.tmdb.org/t/p/w500{{ filme.poster_path }}"
+                                alt="{{ filme.title }}"
+                                class="movie-poster"
+                            >
+                        {% elif filme.poster %}
+                            <img
+                                src="{{ filme.poster }}"
+                                alt="{{ filme.titulo|default:filme.title }}"
+                                class="movie-poster"
+                            >
+                        {% else %}
+                            <div class="movie-no-poster">
+                                Poster indisponível
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="movie-body">
+                        <h3 class="movie-title">
+                            {% if filme.title %}
+                                {{ filme.title }}
+                            {% else %}
+                                {{ filme.titulo }}
+                            {% endif %}
+                        </h3>
+
+                        <div class="movie-meta">
+                            {% if filme.release_year %}
+                                Ano: {{ filme.release_year }}
+                            {% elif filme.data_lancamento %}
+                                Lançamento: {{ filme.data_lancamento }}
+                            {% else %}
+                                Ano não disponível
+                            {% endif %}
+                        </div>
+
+                        <p class="movie-overview">
+                            {% if filme.overview %}
+                                {{ filme.overview }}
+                            {% elif filme.descricao %}
+                                {{ filme.descricao }}
+                            {% else %}
+                                Sem descrição disponível para este filme.
+                            {% endif %}
+                        </p>
+
+                        <div class="movie-actions">
+                            <a
+                                href="{% url 'detalhes_filme' filme_id=filme.id %}"
+                                class="btn btn-primary btn-block"
+                            >
+                                Ver detalhes
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card empty-state">
+            <h3 class="empty-title">Nenhum filme encontrado</h3>
+            <p class="empty-text">
+                Tente pesquisar com outro título.
+            </p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

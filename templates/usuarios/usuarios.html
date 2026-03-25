@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Usuários | MovieStar{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/usuarios.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="card users-search-card">
+    <h1 class="users-title">Usuários</h1>
+    <p class="users-subtitle">
+        Pesquise outros usuários da plataforma e veja o perfil público deles.
+    </p>
+
+    <form method="get" class="users-search-form">
+        <input
+            type="text"
+            name="q"
+            placeholder="Buscar por username, nome ou sobrenome..."
+            value="{{ query }}"
+        >
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+</section>
+
+{% if usuarios %}
+    <section class="users-list">
+        {% for usuario in usuarios %}
+            <article class="card user-card">
+                <div class="user-card-content">
+                    <div class="user-main">
+                        <div class="user-avatar">
+                            {% if usuario.perfil.foto %}
+                                <img src="{{ usuario.perfil.foto.url }}" alt="{{ usuario.username }}">
+                            {% else %}
+                                {{ usuario.username|first|upper }}
+                            {% endif %}
+                        </div>
+
+                        <div class="user-info">
+                            <h2 class="user-username">@{{ usuario.username }}</h2>
+
+                            <div class="user-name">
+                                {% if usuario.first_name or usuario.last_name %}
+                                    {{ usuario.first_name }} {{ usuario.last_name }}
+                                {% else %}
+                                    Sem nome público informado
+                                {% endif %}
+                            </div>
+
+                            <div class="user-meta">
+                                {{ usuario.total_reviews }} review{{ usuario.total_reviews|pluralize:"s" }}
+                                {% if usuario.media_avaliacoes %}
+                                    • média {{ usuario.media_avaliacoes|floatformat:1 }}/5
+                                {% endif %}
+                            </div>
+
+                            {% if usuario.conversa_existente %}
+                                <div class="user-badge">
+                                    Conversa existente
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="user-actions">
+                        <a href="{% url 'perfil_publico' username=usuario.username %}" class="btn btn-primary">
+                            Ver perfil
+                        </a>
+
+                        {% if usuario.conversa_existente %}
+                            <a href="{% url 'abrir_conversa' conversa_id=usuario.conversa_id %}" class="btn btn-secondary">
+                                Abrir conversa
+                            </a>
+                        {% else %}
+                            <a href="{% url 'iniciar_conversa' username=usuario.username %}" class="btn btn-secondary">
+                                Mensagem
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="card users-empty">
+        <h2 class="users-empty-title">Nenhum usuário encontrado</h2>
+        <p class="users-empty-text">Tente pesquisar com outro nome.</p>
+    </section>
+{% endif %}
+{% endblock %}

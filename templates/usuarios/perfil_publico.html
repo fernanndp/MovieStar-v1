@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}@{{ usuario_perfil.username }} | MovieStar{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/perfil-publico.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="card profile-public-header">
+    <div class="profile-public-top">
+        <div class="profile-public-avatar">
+            {% if usuario_perfil.perfil.foto %}
+                <img src="{{ usuario_perfil.perfil.foto.url }}" alt="{{ usuario_perfil.username }}" class="profile-public-avatar-image">
+            {% else %}
+                {{ usuario_perfil.username|first|upper }}
+            {% endif %}
+        </div>
+
+        <div>
+            <h1 class="profile-public-username">@{{ usuario_perfil.username }}</h1>
+            <p class="profile-public-name">
+                {% if usuario_perfil.first_name or usuario_perfil.last_name %}
+                    {{ usuario_perfil.first_name }} {{ usuario_perfil.last_name }}
+                {% else %}
+                    Usuário da plataforma MovieStar
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <div class="profile-public-stats">
+        <div class="card profile-public-stat-card">
+            <strong>{{ total_reviews }}</strong><br>
+            <span class="profile-public-stat-label">Reviews</span>
+        </div>
+
+        <div class="card profile-public-stat-card">
+            <strong>
+                {% if media_avaliacoes %}
+                    {{ media_avaliacoes|floatformat:1 }}/5
+                {% else %}
+                    -
+                {% endif %}
+            </strong><br>
+            <span class="profile-public-stat-label">Média das notas</span>
+        </div>
+    </div>
+
+    {% if user.username != usuario_perfil.username %}
+        <div class="profile-public-actions">
+            {% if conversa_existente %}
+                <div class="profile-public-badge">
+                    Conversa existente
+                </div>
+
+                <a href="{% url 'abrir_conversa' conversa_id=conversa_existente.id %}" class="btn btn-secondary">
+                    Abrir conversa
+                </a>
+            {% else %}
+                <a href="{% url 'iniciar_conversa' username=usuario_perfil.username %}" class="btn btn-secondary">
+                    Enviar mensagem
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</section>
+
+<section>
+    <h2 class="profile-public-section-title">Reviews públicas</h2>
+
+    {% if reviews %}
+        <div class="profile-public-reviews">
+            {% for review in reviews %}
+                <article class="card profile-public-review-card">
+                    <div class="profile-public-review-top">
+                        <div>
+                            <h3 class="profile-public-movie-title">
+                                {{ review.filme.titulo }}
+                            </h3>
+                            <div class="profile-public-review-date">
+                                {{ review.data_criacao|date:"d/m/Y H:i" }}
+                            </div>
+                        </div>
+
+                        {% if review.avaliacao %}
+                            <div class="profile-public-rating">
+                                {{ review.avaliacao }}/5
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="profile-public-comment">
+                        {{ review.comentario }}
+                    </div>
+
+                    <div class="profile-public-review-actions">
+                        <a href="{% url 'detalhes_filme' filme_id=review.filme.id %}" class="btn btn-primary">
+                            Ver filme
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card profile-public-empty">
+            <h3 style="margin-bottom: 0.5rem;">Esse usuário ainda não publicou reviews</h3>
+            <p class="profile-public-empty-text">Quando ele avaliar filmes, elas aparecerão aqui.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

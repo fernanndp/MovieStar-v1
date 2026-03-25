@@ -1,0 +1,182 @@
+.profile-public-header {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-public-top {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.profile-public-avatar {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary) 0%, #f59e0b 100%);
+    color: #111827;
+    font-size: 1.8rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: var(--shadow);
+}
+
+.profile-public-avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.profile-public-username {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+}
+
+.profile-public-name {
+    color: var(--muted);
+}
+
+.profile-public-stats {
+    margin-top: 1.2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.profile-public-stat-card {
+    padding: 1rem 1.2rem;
+}
+
+.profile-public-stat-label {
+    color: var(--muted);
+}
+
+.profile-public-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.profile-public-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(250, 204, 21, 0.14);
+    color: #fde68a;
+    font-weight: 700;
+    font-size: 0.88rem;
+}
+
+.profile-public-section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.profile-public-reviews {
+    display: grid;
+    gap: 1rem;
+}
+
+.profile-public-review-card {
+    padding: 1rem;
+}
+
+.profile-public-review-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+}
+
+.profile-public-movie-title {
+    font-size: 1.15rem;
+    margin-bottom: 0.25rem;
+}
+
+.profile-public-review-date {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.profile-public-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(250, 204, 21, 0.14);
+    color: #fde68a;
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+.profile-public-comment {
+    color: #e5e7eb;
+    line-height: 1.65;
+    white-space: pre-wrap;
+}
+
+.profile-public-review-actions {
+    margin-top: 1rem;
+}
+
+.profile-public-empty {
+    padding: 2rem;
+    text-align: center;
+}
+
+.profile-public-empty-text {
+    color: var(--muted);
+}
+
+@media (max-width: 700px) {
+    .profile-public-header {
+        padding: 1.3rem;
+    }
+
+    .profile-public-top {
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-public-avatar {
+        margin: 0 auto;
+    }
+
+    .profile-public-stats {
+        flex-direction: column;
+    }
+
+    .profile-public-stat-card {
+        width: 100%;
+    }
+
+    .profile-public-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .profile-public-actions .btn {
+        width: 100%;
+    }
+
+    .profile-public-review-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .profile-public-review-actions .btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,235 @@
+.reviews-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.reviews-title {
+    font-size: 2rem;
+    margin-bottom: 0.4rem;
+}
+
+.reviews-subtitle {
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.reviews-count {
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    font-weight: 700;
+}
+
+.reviews-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.review-card {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.review-poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+}
+
+.review-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.review-poster-empty {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.8rem;
+}
+
+.review-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    min-width: 0;
+}
+
+.review-top {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.review-movie-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.review-meta {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.review-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(250, 204, 21, 0.14);
+    color: #fde68a;
+    font-weight: 700;
+    font-size: 0.92rem;
+    white-space: nowrap;
+}
+
+.review-comment {
+    color: #e5e7eb;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.review-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    align-items: center;
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,0.07);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+.btn-danger {
+    background: rgba(239, 68, 68, 0.14);
+    color: #fecaca;
+    border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+.btn-danger:hover {
+    background: rgba(239, 68, 68, 0.22);
+}
+
+.inline-form {
+    display: inline;
+    margin: 0;
+}
+
+.empty-state {
+    padding: 2rem;
+    text-align: center;
+}
+
+.empty-title {
+    font-size: 1.35rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-text {
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+}
+.review-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.review-author-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.review-author-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.review-author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.review-author-name {
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+@media (max-width: 700px) {
+    .reviews-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .reviews-count {
+        width: 100%;
+        text-align: center;
+    }
+
+    .review-card {
+        grid-template-columns: 1fr;
+    }
+
+    .review-poster {
+        max-width: 180px;
+    }
+
+    .review-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .review-actions {
+        width: 100%;
+    }
+
+    .review-actions .btn,
+    .review-actions form,
+    .review-actions form .btn {
+        width: 100%;
+    }
+}

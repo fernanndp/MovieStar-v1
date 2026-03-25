@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Chat com @{{ outro_usuario.username }} | MovieStar{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="card chat-header-card">
+    <div class="chat-header-top">
+        <div class="chat-user-block">
+            <div class="chat-avatar">
+                {% if outro_usuario.perfil.foto %}
+                    <img src="{{ outro_usuario.perfil.foto.url }}" alt="{{ outro_usuario.username }}">
+                {% else %}
+                    {{ outro_usuario.username|first|upper }}
+                {% endif %}
+            </div>
+
+            <div>
+                <h1 class="chat-title">@{{ outro_usuario.username }}</h1>
+                <p class="chat-subtitle">
+                    {% if outro_usuario.first_name or outro_usuario.last_name %}
+                        {{ outro_usuario.first_name }} {{ outro_usuario.last_name }}
+                    {% else %}
+                        Usuário da plataforma MovieStar
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="chat-header-actions">
+            <a href="{% url 'perfil_publico' username=outro_usuario.username %}" class="btn btn-secondary">
+                Ver perfil
+            </a>
+
+            <a href="{% url 'listar_conversas' %}" class="btn btn-secondary">
+                Voltar
+            </a>
+
+           {% if mensagens_chat %}
+                <form method="post"
+                    action="{% url 'excluir_conversa' conversa_id=conversa.id %}"
+                    onsubmit="return confirm('Tem certeza que deseja excluir esta conversa? Essa ação apagará todas as mensagens.');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        Excluir conversa
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="card chat-card">
+    {% if mensagens_chat %}
+        <div class="chat-messages" id="chat-messages">
+            {% for mensagem in mensagens_chat %}
+                <div class="chat-row {% if mensagem.remetente == user %}mine{% else %}theirs{% endif %}">
+                    {% if mensagem.remetente != user %}
+                        <div class="chat-message-avatar">
+                            {% if mensagem.remetente.perfil.foto %}
+                                <img src="{{ mensagem.remetente.perfil.foto.url }}" alt="{{ mensagem.remetente.username }}">
+                            {% else %}
+                                {{ mensagem.remetente.username|first|upper }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    <article class="chat-bubble {% if mensagem.remetente == user %}chat-bubble-mine{% else %}chat-bubble-theirs{% endif %}">
+                        <div class="chat-bubble-top">
+                            <span class="chat-sender">
+                                {% if mensagem.remetente == user %}
+                                    Você
+                                {% else %}
+                                    {{ mensagem.remetente.username }}
+                                {% endif %}
+                            </span>
+                            <span class="chat-time">
+                                {{ mensagem.criada_em|date:"d/m/Y H:i" }}
+                            </span>
+                        </div>
+
+                        <div class="chat-text">
+                            {{ mensagem.texto }}
+                        </div>
+                    </article>
+
+                    {% if mensagem.remetente == user %}
+                        <div class="chat-message-avatar">
+                            {% if user.perfil.foto %}
+                                <img src="{{ user.perfil.foto.url }}" alt="{{ user.username }}">
+                            {% else %}
+                                {{ user.username|first|upper }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="chat-empty">
+            <h2 class="chat-empty-title">Nenhuma mensagem ainda</h2>
+            <p class="chat-empty-text">
+                Envie a primeira mensagem para iniciar a conversa.
+            </p>
+        </div>
+    {% endif %}
+
+    <form method="post" class="chat-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="messages" style="margin-bottom: 1rem;">
+                {% for error in form.non_field_errors %}
+                    <div class="message error">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="chat-form-field">
+            <label for="{{ form.texto.id_for_label }}">Mensagem</label>
+            {{ form.texto }}
+            {% if form.texto.errors %}
+                <ul class="errorlist">
+                    {% for error in form.texto.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="chat-form-actions">
+            <button type="submit" class="btn btn-primary">
+                Enviar mensagem
+            </button>
+        </div>
+    </form>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const chatMessages = document.getElementById("chat-messages");
+    if (chatMessages) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+</script>
+{% endblock %}

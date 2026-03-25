@@ -1,0 +1,410 @@
+.movie-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    min-height: 420px;
+    display: grid;
+    align-items: end;
+    margin-bottom: 2rem;
+    background:
+        linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.95) 85%),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.92) 0%, rgba(15, 23, 42, 0.65) 100%);
+}
+
+.movie-hero.has-backdrop {
+    background:
+        linear-gradient(180deg, rgba(15, 23, 42, 0.12) 0%, rgba(15, 23, 42, 0.95) 85%),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.96) 0%, rgba(15, 23, 42, 0.72) 100%),
+        url("https://image.tmdb.org/t/p/original") center/cover no-repeat;
+}
+
+.movie-hero-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.poster-box {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.04);
+    box-shadow: var(--shadow);
+    min-height: 380px;
+    width: 100%;
+}
+
+.poster-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.poster-empty {
+    min-height: 380px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    text-align: center;
+    padding: 1rem;
+    font-weight: 700;
+}
+
+.movie-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1rem;
+}
+
+.movie-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
+    color: #e5e7eb;
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.movie-title {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.08;
+    margin: 0;
+}
+
+.movie-overview {
+    color: #d1d5db;
+    line-height: 1.7;
+    font-size: 1rem;
+    max-width: 780px;
+}
+
+.movie-actions {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,0.07);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.4rem;
+}
+
+.section-card {
+    padding: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+}
+
+.section-subtitle {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
+}
+
+.review-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.review-card {
+    padding: 1rem;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+}
+
+.review-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 0.7rem;
+    flex-wrap: wrap;
+}
+
+.review-user {
+    font-weight: 700;
+}
+
+.review-date {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.review-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(250, 204, 21, 0.14);
+    color: #fde68a;
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+.review-comment {
+    color: #e5e7eb;
+    line-height: 1.65;
+    white-space: pre-wrap;
+}
+
+.empty-reviews {
+    padding: 1rem;
+    border-radius: 16px;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    text-align: center;
+}
+
+.trailer-box iframe {
+    width: 100%;
+    min-height: 320px;
+    border: none;
+    border-radius: 18px;
+}
+
+.review-user-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.review-user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    font-size: 0.92rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.review-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+.review-comments {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.review-comments-title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.review-comments-list {
+    display: grid;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.review-comment-item {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+}
+
+.review-comment-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.review-comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.review-comment-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.review-comment-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.2rem;
+    font-size: 0.92rem;
+}
+
+.review-comment-top span {
+    color: var(--muted);
+}
+
+.review-comment-text {
+    color: #d1d5db;
+    line-height: 1.55;
+    white-space: pre-wrap;
+}
+
+.review-comments-empty {
+    color: var(--muted);
+    margin-bottom: 1rem;
+}
+
+.review-comment-form {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.review-comment-form .btn {
+    width: fit-content;
+}
+
+@media (max-width: 700px) {
+    .review-comment-form .btn {
+        width: 100%;
+    }
+
+    .review-comment-item {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 980px) {
+    .movie-hero {
+        min-height: auto;
+    }
+
+    .movie-hero-content {
+        grid-template-columns: 1fr;
+        gap: 1.4rem;
+    }
+
+    .poster-box {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .movie-hero-content {
+        padding: 1.2rem;
+    }
+
+    .section-card {
+        padding: 1.2rem;
+    }
+
+    .movie-title {
+        font-size: 2rem;
+        line-height: 1.15;
+    }
+
+    .movie-overview {
+        font-size: 0.96rem;
+        line-height: 1.6;
+    }
+
+    .movie-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .movie-actions .btn {
+        width: 100%;
+    }
+
+    .review-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .review-user-block {
+        width: 100%;
+    }
+
+    .trailer-box iframe {
+        min-height: 240px;
+    }
+}
+
+@media (max-width: 540px) {
+    .movie-hero-content {
+        padding: 1rem;
+    }
+
+    .section-card {
+        padding: 1rem;
+    }
+
+    .poster-box {
+        max-width: 100%;
+        min-height: auto;
+    }
+
+    .movie-badge {
+        font-size: 0.84rem;
+        padding: 0.4rem 0.7rem;
+    }
+
+    .movie-title {
+        font-size: 1.7rem;
+    }
+
+    .review-card {
+        padding: 0.9rem;
+    }
+
+    .review-user-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .trailer-box iframe {
+        min-height: 210px;
+    }
+}

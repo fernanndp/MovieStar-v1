@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Editar perfil | MovieStar{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/editar-perfil.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="profile-wrap">
+    <div class="card profile-card">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                {% if perfil.foto %}
+                    <img src="{{ perfil.foto.url }}" alt="Foto de perfil" class="profile-avatar-image">
+                {% else %}
+                    {{ user.username|first|upper }}
+                {% endif %}
+            </div>
+
+            <div>
+                <h1 class="profile-title">Editar perfil</h1>
+                <p class="profile-subtitle">
+                    Atualize suas informações pessoais e sua foto de perfil.
+                </p>
+            </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="messages">
+                    {% for error in form.non_field_errors %}
+                        <div class="message error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if perfil_form.non_field_errors %}
+                <div class="messages">
+                    {% for error in perfil_form.non_field_errors %}
+                        <div class="message error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-grid">
+                <div class="field-box">
+                    <label for="{{ form.username.id_for_label }}">Nome de usuário</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.username.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="field-box">
+                    <label for="{{ form.email.id_for_label }}">E-mail</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.email.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="field-box">
+                    <label for="{{ form.first_name.id_for_label }}">Primeiro nome</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.first_name.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="field-box">
+                    <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.last_name.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="field-box full">
+                    <label for="{{ perfil_form.foto.id_for_label }}">Foto de perfil</label>
+
+                    {% if perfil.foto %}
+                        <div class="profile-photo-preview">
+                            <img src="{{ perfil.foto.url }}" alt="Foto de perfil">
+                        </div>
+
+                        <label class="profile-control-box remove-photo-check">
+                            {{ perfil_form.remover_foto }}
+                            <span>Remover foto atual</span>
+                        </label>
+
+                        {% if perfil_form.remover_foto.errors %}
+                            <ul class="errorlist">
+                                {% for error in perfil_form.remover_foto.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="profile-upload-wrap">
+                        {{ perfil_form.foto }}
+                        <label for="{{ perfil_form.foto.id_for_label }}" class="profile-control-box profile-upload-label">
+                            <span class="profile-upload-button">Escolher arquivo</span>
+                            <span class="profile-file-name" id="profile-file-name">Nenhum arquivo escolhido</span>
+                        </label>
+                    </div>
+
+                    {% if perfil_form.foto.errors %}
+                        <ul class="errorlist">
+                            {% for error in perfil_form.foto.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <div class="field-help">
+                        Escolha uma imagem para usar como foto de perfil.
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">
+                    Salvar alterações
+                </button>
+
+                <a href="{% url 'home' %}" class="btn btn-secondary">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+
+        <div class="danger-zone">
+            <h2 class="danger-zone-title">Zona de perigo</h2>
+            <p class="danger-zone-text">
+                Ao excluir sua conta, suas reviews, conversas e foto de perfil também serão removidas.
+                Essa ação não pode ser desfeita.
+            </p>
+
+            <form method="post"
+                  action="{% url 'excluir_conta' %}"
+                  onsubmit="return confirm('Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita.');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    Excluir conta
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const fileInput = document.getElementById("{{ perfil_form.foto.id_for_label }}");
+    const fileName = document.getElementById("profile-file-name");
+
+    if (fileInput && fileName) {
+        fileInput.addEventListener("change", function () {
+            if (this.files && this.files.length > 0) {
+                fileName.textContent = this.files[0].name;
+            } else {
+                fileName.textContent = "Nenhum arquivo escolhido";
+            }
+        });
+    }
+</script>
+{% endblock %}

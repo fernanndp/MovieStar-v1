@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Mensagens | MovieStar{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/conversas.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="card conversations-header-card">
+    <h1 class="conversations-title">Mensagens</h1>
+    <p class="conversations-subtitle">
+        Aqui estão suas conversas com outros usuários.
+    </p>
+</section>
+
+{% if conversas_data %}
+    <section class="conversations-list">
+        {% for item in conversas_data %}
+            <article class="card conversation-card">
+                <div class="conversation-card-content">
+                    <div class="conversation-main">
+                        <div class="conversation-avatar">
+                            {% if item.outro_usuario.perfil.foto %}
+                                <img src="{{ item.outro_usuario.perfil.foto.url }}" alt="{{ item.outro_usuario.username }}">
+                            {% else %}
+                                {{ item.outro_usuario.username|first|upper }}
+                            {% endif %}
+                        </div>
+
+                        <div class="conversation-info">
+                            <h2 class="conversation-username">@{{ item.outro_usuario.username }}</h2>
+
+                            <div class="conversation-meta">
+                                {% if item.outro_usuario.first_name or item.outro_usuario.last_name %}
+                                    {{ item.outro_usuario.first_name }} {{ item.outro_usuario.last_name }}
+                                {% else %}
+                                    Usuário da plataforma
+                                {% endif %}
+                            </div>
+
+                            <div class="conversation-preview">
+                                {% if item.ultima_mensagem %}
+                                    <strong>
+                                        {% if item.ultima_mensagem.remetente == user %}
+                                            Você:
+                                        {% else %}
+                                            {{ item.ultima_mensagem.remetente.username }}:
+                                        {% endif %}
+                                    </strong>
+                                    {{ item.ultima_mensagem.texto|truncatechars:70 }}
+                                {% else %}
+                                    Nenhuma mensagem ainda.
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="conversation-side">
+                        {% if item.conversa.nao_lidas %}
+                            <div class="conversation-badge">
+                                {{ item.conversa.nao_lidas }} nova{{ item.conversa.nao_lidas|pluralize:"s" }}
+                            </div>
+                        {% endif %}
+
+                        <div class="conversation-date">
+                            {{ item.conversa.atualizada_em|date:"d/m/Y H:i" }}
+                        </div>
+
+                        <a href="{% url 'abrir_conversa' conversa_id=item.conversa.id %}" class="btn btn-primary">
+                            Abrir chat
+                        </a>
+
+                        <form method="post"
+                              action="{% url 'excluir_conversa' conversa_id=item.conversa.id %}"
+                              class="conversation-delete-form"
+                              onsubmit="return confirm('Tem certeza que deseja excluir esta conversa? Essa ação apagará todas as mensagens.');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                Excluir conversa
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="card conversations-empty">
+        <h2 class="conversations-empty-title">Você ainda não tem conversas</h2>
+        <p class="conversations-empty-text">
+            Visite o perfil de outro usuário e clique em “Enviar mensagem”.
+        </p>
+        <a href="{% url 'listar_usuarios' %}" class="btn btn-primary">
+            Explorar usuários
+        </a>
+    </section>
+{% endif %}
+{% endblock %}

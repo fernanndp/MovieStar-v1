@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if editando %}
+        Editar review | MovieStar
+    {% else %}
+        Adicionar review | MovieStar
+    {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/adicionar-review.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="review-page">
+    <aside class="card movie-summary">
+        <div class="movie-summary-poster">
+            {% if filme.poster %}
+                <img src="{{ filme.poster }}" alt="{{ filme.titulo }}">
+            {% else %}
+                <div class="movie-summary-empty">
+                    Poster indisponível
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="movie-summary-body">
+            <h2 class="movie-summary-title">{{ filme.titulo }}</h2>
+            <p class="movie-summary-text">
+                {% if filme.descricao %}
+                    {{ filme.descricao|truncatechars:220 }}
+                {% else %}
+                    Sem descrição disponível para este filme.
+                {% endif %}
+            </p>
+        </div>
+    </aside>
+
+    <section class="card review-card">
+        <div class="review-header">
+            <h1 class="review-title">
+                {% if editando %}
+                    Editar review
+                {% else %}
+                    Adicionar review
+                {% endif %}
+            </h1>
+
+            <p class="review-subtitle">
+                {% if editando %}
+                    Atualize sua opinião sobre <strong>{{ filme.titulo }}</strong>.
+                {% else %}
+                    Compartilhe sua opinião sobre <strong>{{ filme.titulo }}</strong>.
+                {% endif %}
+            </p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="messages" style="margin-bottom: 1rem;">
+                    {% for error in form.non_field_errors %}
+                        <div class="message error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="field-group">
+                <label for="{{ form.comentario.id_for_label }}" class="field-label">
+                    Comentário
+                </label>
+                {{ form.comentario }}
+                {% if form.comentario.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.comentario.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="field-help">
+                    Escreva o que você achou do filme.
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label">
+                    Avaliação
+                </label>
+
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="avaliacao" value="5"
+                           {% if form.avaliacao.value|stringformat:"s" == "5" %}checked{% endif %}>
+                    <label for="star5" title="5 estrelas">★</label>
+
+                    <input type="radio" id="star4" name="avaliacao" value="4"
+                           {% if form.avaliacao.value|stringformat:"s" == "4" %}checked{% endif %}>
+                    <label for="star4" title="4 estrelas">★</label>
+
+                    <input type="radio" id="star3" name="avaliacao" value="3"
+                           {% if form.avaliacao.value|stringformat:"s" == "3" %}checked{% endif %}>
+                    <label for="star3" title="3 estrelas">★</label>
+
+                    <input type="radio" id="star2" name="avaliacao" value="2"
+                           {% if form.avaliacao.value|stringformat:"s" == "2" %}checked{% endif %}>
+                    <label for="star2" title="2 estrelas">★</label>
+
+                    <input type="radio" id="star1" name="avaliacao" value="1"
+                           {% if form.avaliacao.value|stringformat:"s" == "1" %}checked{% endif %}>
+                    <label for="star1" title="1 estrela">★</label>
+                </div>
+
+                {% if form.avaliacao.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.avaliacao.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <div class="field-help">
+                    A nota é opcional, mas ajuda outros usuários.
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">
+                    {% if editando %}
+                        Salvar alterações
+                    {% else %}
+                        Salvar review
+                    {% endif %}
+                </button>
+
+                <a href="{% url 'detalhes_filme' filme_id=filme.id %}" class="btn btn-secondary">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

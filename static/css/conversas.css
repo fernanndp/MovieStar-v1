@@ -1,0 +1,183 @@
+.conversations-header-card {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.conversations-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.conversations-subtitle {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.conversations-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.conversation-card {
+    padding: 1.2rem;
+}
+
+.conversation-card-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.conversation-main {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    min-width: 0;
+    flex: 1;
+}
+
+.conversation-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary) 0%, #f59e0b 100%);
+    color: #111827;
+    font-size: 1.2rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: var(--shadow);
+}
+
+.conversation-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.conversation-info {
+    min-width: 0;
+}
+
+.conversation-username {
+    font-size: 1.15rem;
+    margin-bottom: 0.2rem;
+    line-height: 1.2;
+}
+
+.conversation-meta {
+    color: var(--muted);
+    margin-bottom: 0.45rem;
+    line-height: 1.5;
+}
+
+.conversation-preview {
+    color: #d1d5db;
+    line-height: 1.55;
+    word-break: break-word;
+}
+
+.conversation-side {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    align-items: flex-end;
+}
+
+.conversation-badge {
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(250, 204, 21, 0.14);
+    color: #fde68a;
+    font-weight: 700;
+    font-size: 0.88rem;
+}
+
+.conversation-date {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.conversation-side .btn,
+.conversation-side .btn-primary,
+.conversation-side .btn-secondary,
+.conversation-side .btn-danger {
+    min-width: 150px;
+    min-height: 46px;
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+    font-size: 0.90rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+}
+
+.conversation-delete-form {
+    margin: 0;
+}
+
+.btn-danger {
+    background: rgba(239, 68, 68, 0.14);
+    color: #fecaca;
+    border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+.btn-danger:hover {
+    background: rgba(239, 68, 68, 0.22);
+    transform: translateY(-1px);
+}
+
+.conversations-empty {
+    padding: 2rem;
+    text-align: center;
+}
+
+.conversations-empty-title {
+    margin-bottom: 0.5rem;
+}
+
+.conversations-empty-text {
+    color: var(--muted);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+    .conversation-card-content {
+        align-items: flex-start;
+    }
+
+    .conversation-main {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .conversation-side {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .conversation-delete-form {
+        width: 100%;
+        margin: 0;
+    }
+
+    .conversation-side .btn,
+    .conversation-side .btn-primary,
+    .conversation-side .btn-secondary,
+    .conversation-side .btn-danger,
+    .conversation-delete-form .btn {
+        min-width: 0;
+        width: 100%;
+    }
+}

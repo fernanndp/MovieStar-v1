@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Login | MovieStar{% endblock %}
+
+{% block content %}
+<div class="form-card card">
+    <h1 class="form-title">Entrar</h1>
+    <p class="form-subtitle">Acesse sua conta para avaliar filmes e ver suas reviews.</p>
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="messages" style="margin-bottom: 1rem;">
+                {% for error in form.non_field_errors %}
+                    <div class="message error">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary btn-block">
+            Entrar
+        </button>
+    </form>
+
+    <p class="helper-text">
+        Ainda não tem conta?
+        <a href="{% url 'register' %}">Criar conta</a>
+    </p>
+</div>
+{% endblock %}

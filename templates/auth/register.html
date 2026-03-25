@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro | MovieStar{% endblock %}
+
+{% block content %}
+<div class="form-card card">
+    <h1 class="form-title">Criar conta</h1>
+    <p class="form-subtitle">Cadastre-se para salvar suas opiniões e montar seu histórico de reviews.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary btn-block">
+            Criar conta
+        </button>
+    </form>
+
+    <p class="helper-text">
+        Já tem conta?
+        <a href="{% url 'login' %}">Entrar</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Minhas reviews | MovieStar{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/minhas-reviews.css' %}">
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="reviews-header">
+        <div>
+            <h1 class="reviews-title">Minhas reviews</h1>
+            <p class="reviews-subtitle">
+                Aqui ficam todas as avaliações que você já fez nos filmes.
+            </p>
+        </div>
+
+        <div class="reviews-count">
+            {{ reviews|length }} review{{ reviews|length|pluralize:"s" }}
+        </div>
+    </div>
+
+    {% if reviews %}
+        <div class="reviews-grid">
+            {% for review in reviews %}
+                <article class="card review-card">
+                    <div class="review-poster">
+                        {% if review.filme.poster %}
+                            <img src="{{ review.filme.poster }}" alt="{{ review.filme.titulo }}">
+                        {% else %}
+                            <div class="review-poster-empty">
+                                Poster indisponível
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="review-content">
+                        <div class="review-top">
+                            <div class="review-left">
+                                <h2 class="review-movie-title">{{ review.filme.titulo }}</h2>
+
+                                <div class="review-author-row">
+                                    <div class="review-author-avatar">
+                                        {% if user.perfil.foto %}
+                                            <img src="{{ user.perfil.foto.url }}" alt="{{ user.username }}">
+                                        {% else %}
+                                            {{ user.username|first|upper }}
+                                        {% endif %}
+                                    </div>
+
+                                    <div>
+                                        <div class="review-author-name">Você</div>
+                                        <div class="review-meta">
+                                            Criada em {{ review.data_criacao|date:"d/m/Y H:i" }}
+                                            {% if review.data_atualizacao and review.data_atualizacao != review.data_criacao %}
+                                                • Atualizada em {{ review.data_atualizacao|date:"d/m/Y H:i" }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if review.avaliacao %}
+                                <div class="review-rating">
+                                    {{ review.avaliacao }}/5
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="review-comment">
+                            {{ review.comentario }}
+                        </div>
+
+                        <div class="review-actions">
+                            <a href="{% url 'detalhes_filme' filme_id=review.filme.id %}" class="btn btn-primary">
+                                Adicionar review
+                            </a>
+
+                            <a href="{% url 'editar_review' review_id=review.id %}" class="btn btn-secondary">
+                                Editar
+                            </a>
+
+                            <form method="post"
+                                  action="{% url 'excluir_review' review_id=review.id %}"
+                                  class="inline-form"
+                                  onsubmit="return confirm('Tem certeza que deseja excluir esta review?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    Excluir
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card empty-state">
+            <h2 class="empty-title">Você ainda não fez nenhuma review</h2>
+            <p class="empty-text">
+                Explore os filmes, escolha um título e registre sua opinião.
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-primary">
+                Explorar filmes
+            </a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ filme.title }} | MovieStar{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/detalhes-filme.css' %}">
+{% endblock %}
+{% block content %}
+<section class="movie-hero {% if filme.backdrop_path %}has-backdrop{% endif %}">
+    <div class="movie-hero-content">
+        <div class="poster-box">
+            {% if filme.poster_path %}
+                <img src="https://image.tmdb.org/t/p/w500{{ filme.poster_path }}" alt="{{ filme.title }}">
+            {% else %}
+                <div class="poster-empty">Poster indisponível</div>
+            {% endif %}
+        </div>
+
+        <div class="movie-info">
+            <div class="movie-badge">
+                Lançamento: {{ filme.release_year }}
+            </div>
+
+            <h1 class="movie-title">{{ filme.title }}</h1>
+
+            <p class="movie-overview">
+                {% if filme.overview %}
+                    {{ filme.overview }}
+                {% else %}
+                    Sem sinopse disponível para este filme.
+                {% endif %}
+            </p>
+
+            <div class="movie-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'adicionar_review' filme_id=filme.id %}" class="btn btn-primary">
+                        Adicionar review
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary">
+                        Entrar para avaliar
+                    </a>
+                {% endif %}
+
+                <a href="{% url 'home' %}" class="btn btn-secondary">
+                    Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="content-grid">
+    <section class="card section-card">
+        <h2 class="section-title">Reviews</h2>
+        <p class="section-subtitle">
+            Veja o que outros usuários acharam deste filme.
+        </p>
+
+        {% if reviews %}
+            <div class="review-list">
+               {% for review in reviews %}
+                <article class="review-card">
+                    <div class="review-top">
+                        <div class="review-user-block">
+                            <div class="review-user-avatar">
+                                {% if review.usuario.perfil.foto %}
+                                    <img src="{{ review.usuario.perfil.foto.url }}" alt="{{ review.usuario.username }}">
+                                {% else %}
+                                    {{ review.usuario.username|first|upper }}
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <div class="review-user">{{ review.usuario.username }}</div>
+                                <div class="review-date">
+                                    {{ review.data_criacao|date:"d/m/Y H:i" }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if review.avaliacao %}
+                            <div class="review-rating">
+                                {{ review.avaliacao }}/5
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="review-comment">
+                        {{ review.comentario }}
+                    </div>
+
+                    <div class="review-comments">
+                        <h4 class="review-comments-title">Comentários</h4>
+
+                        {% if review.comentarios.all %}
+                            <div class="review-comments-list">
+                                {% for comentario in review.comentarios.all %}
+                                    <div class="review-comment-item">
+                                        <div class="review-comment-avatar">
+                                            {% if comentario.usuario.perfil.foto %}
+                                                <img src="{{ comentario.usuario.perfil.foto.url }}" alt="{{ comentario.usuario.username }}">
+                                            {% else %}
+                                                {{ comentario.usuario.username|first|upper }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="review-comment-body">
+                                            <div class="review-comment-top">
+                                                <strong>@{{ comentario.usuario.username }}</strong>
+                                                <span>{{ comentario.data_criacao|date:"d/m/Y H:i" }}</span>
+                                            </div>
+
+                                            <div class="review-comment-text">
+                                                {{ comentario.texto }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="review-comments-empty">
+                                Nenhum comentário ainda.
+                            </div>
+                        {% endif %}
+
+                        {% if user.is_authenticated and review.usuario != user %}
+                            <form method="post"
+                                action="{% url 'comentar_review' review_id=review.id %}"
+                                class="review-comment-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next_url" value="{{ request.path }}">
+                                <textarea name="review-{{ review.id }}-texto"
+                                        rows="3"
+                                        placeholder="Escreva um comentário..."></textarea>
+                                <button type="submit" class="btn btn-secondary">
+                                    Comentar
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-reviews">
+                Ainda não há reviews para este filme.
+            </div>
+        {% endif %}
+    </section>
+
+    <aside class="card section-card">
+        <h2 class="section-title">Trailer</h2>
+        <p class="section-subtitle">
+            Assista ao trailer oficial, quando disponível.
+        </p>
+
+        {% if filme.trailer_key %}
+            <div class="trailer-box">
+                <iframe
+                        src="https://www.youtube-nocookie.com/embed/{{ filme.trailer_key }}"
+                        title="Trailer de {{ filme.title }}"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+            </div>
+        {% else %}
+            <div class="empty-reviews">
+                Nenhum trailer disponível para este filme.
+            </div>
+        {% endif %}
+    </aside>
+</div>
+{% endblock %}

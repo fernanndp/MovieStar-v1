@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Reviews recentes | MovieStar{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reviews-recentes.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="recent-header card">
+    <h1 class="recent-title">Reviews recentes</h1>
+    <p class="recent-subtitle">
+        Veja as avaliações mais recentes dos usuários e participe da conversa.
+    </p>
+</section>
+
+{% if reviews %}
+    <section class="recent-list">
+        {% for review in reviews %}
+            <article class="card recent-card">
+                <div class="recent-card-layout">
+                    <div class="recent-poster">
+                        {% if review.filme.poster %}
+                            <img src="{{ review.filme.poster }}" alt="{{ review.filme.titulo }}">
+                        {% else %}
+                            <div class="recent-poster-empty">
+                                Poster indisponível
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="recent-content">
+                        <div class="recent-top">
+                            <div class="recent-user-block">
+                                <div class="recent-user-avatar">
+                                    {% if review.usuario.perfil.foto %}
+                                        <img src="{{ review.usuario.perfil.foto.url }}" alt="{{ review.usuario.username }}">
+                                    {% else %}
+                                        {{ review.usuario.username|first|upper }}
+                                    {% endif %}
+                                </div>
+
+                                <div class="recent-user-info">
+                                    <div class="recent-user-name">@{{ review.usuario.username }}</div>
+                                    <div class="recent-meta">
+                                        {{ review.filme.titulo }} • {{ review.data_criacao|date:"d/m/Y H:i" }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if review.avaliacao %}
+                                <div class="recent-rating">
+                                    {{ review.avaliacao }}/5
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="recent-text">
+                            {{ review.comentario }}
+                        </div>
+
+                        <div class="recent-actions">
+                            <a href="{% url 'detalhes_filme' filme_id=review.filme.id %}" class="btn btn-primary">
+                                Ver filme
+                            </a>
+
+                            <a href="{% url 'perfil_publico' username=review.usuario.username %}" class="btn btn-secondary">
+                                Ver perfil
+                            </a>
+                        </div>
+
+                        <div class="recent-comments">
+                            <h3 class="recent-comments-title">Comentários</h3>
+
+                            {% if review.comentarios.all %}
+                                <div class="recent-comments-list">
+                                    {% for comentario in review.comentarios.all %}
+                                        <div class="recent-comment-item">
+                                            <div class="recent-comment-avatar">
+                                                {% if comentario.usuario.perfil.foto %}
+                                                    <img src="{{ comentario.usuario.perfil.foto.url }}" alt="{{ comentario.usuario.username }}">
+                                                {% else %}
+                                                    {{ comentario.usuario.username|first|upper }}
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="recent-comment-body">
+                                                <div class="recent-comment-top">
+                                                    <strong>@{{ comentario.usuario.username }}</strong>
+                                                    <span>{{ comentario.data_criacao|date:"d/m/Y H:i" }}</span>
+                                                </div>
+
+                                                <div class="recent-comment-text">
+                                                    {{ comentario.texto }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="recent-comments-empty">
+                                    Nenhum comentário ainda.
+                                </div>
+                            {% endif %}
+
+                            {% if review.usuario != user %}
+                                <form method="post"
+                                      action="{% url 'comentar_review' review_id=review.id %}"
+                                      class="recent-comment-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next_url" value="{{ request.path }}">
+                                    <textarea name="review-{{ review.id }}-texto"
+                                              rows="3"
+                                              placeholder="Escreva um comentário..."></textarea>
+                                    <button type="submit" class="btn btn-secondary">
+                                        Comentar
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="card recent-empty">
+        <h2 class="recent-empty-title">Nenhuma review recente encontrada</h2>
+        <p class="recent-empty-text">Ainda não há reviews para exibir.</p>
+    </section>
+{% endif %}
+{% endblock %}

@@ -71,16 +71,16 @@ class Conversa(models.Model):
     atualizada_em = models.DateTimeField(auto_now=True)
 
     class Meta:
-            ordering = ["-atualizada_em"]
-            verbose_name = "Conversa"
-            verbose_name_plural = "Conversas"
-            constraints = [
+        ordering = ["-atualizada_em"]
+        verbose_name = "Conversa"
+        verbose_name_plural = "Conversas"
+        constraints = [
             models.UniqueConstraint(
                 fields=["user1", "user2"],
                 name="unique_conversa_entre_dois_usuarios",
             ),
             models.CheckConstraint(
-                condition=~Q(user1=F("user2")),
+                check=~Q(user1=F("user2")),
                 name="check_conversa_nao_permite_mesmo_usuario",
             ),
         ]
@@ -145,12 +145,13 @@ class Perfil(models.Model):
         null=True,
     )
 
-class Meta:
+    class Meta:
         verbose_name = "Perfil"
         verbose_name_plural = "Perfis"
- 
-def __str__(self):
+
+    def __str__(self):
         return f"Perfil de {self.usuario.username}"
+
 
 class ComentarioReview(models.Model):
     review = models.ForeignKey(
@@ -165,6 +166,7 @@ class ComentarioReview(models.Model):
     )
     texto = models.TextField()
     data_criacao = models.DateTimeField(auto_now_add=True)
+    data_atualizacao = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["data_criacao"]

@@ -15,6 +15,8 @@ urlpatterns = [
     path("reviews/", views.minhas_reviews, name="minhas_reviews"),
     path("reviews/recentes/", views.reviews_recentes, name="reviews_recentes"),
     path("reviews/<int:review_id>/comentar/", views.comentar_review, name="comentar_review"),
+    path("comentario/<int:comentario_id>/editar/",views.editar_comentario_review,name="editar_comentario_review",),
+    path("comentario/<int:comentario_id>/excluir/",views.excluir_comentario_review,name="excluir_comentario_review",),
     path("reviews/<int:review_id>/editar/", views.editar_review, name="editar_review"),
     path("reviews/<int:review_id>/excluir/", views.excluir_review, name="excluir_review"),
 

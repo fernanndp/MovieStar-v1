@@ -74,31 +74,43 @@
         <div class="profile-public-reviews">
             {% for review in reviews %}
                 <article class="card profile-public-review-card">
-                    <div class="profile-public-review-top">
-                        <div>
-                            <h3 class="profile-public-movie-title">
-                                {{ review.filme.titulo }}
-                            </h3>
-                            <div class="profile-public-review-date">
-                                {{ review.data_criacao|date:"d/m/Y H:i" }}
-                            </div>
+                    <div class="profile-public-review-layout">
+                        <div class="profile-public-review-poster">
+                            {% if review.filme.poster %}
+                                <img src="{{ review.filme.poster }}" alt="{{ review.filme.titulo }}">
+                            {% else %}
+                                <div class="profile-public-review-poster-empty">
+                                    Poster indisponível
+                                </div>
+                            {% endif %}
                         </div>
 
-                        {% if review.avaliacao %}
-                            <div class="profile-public-rating">
-                                {{ review.avaliacao }}/5
+                        <div class="profile-public-review-content">
+                            <div class="profile-public-review-top">
+                                <div>
+                                    <h3 class="profile-public-movie-title">
+                                        {{ review.filme.titulo }}
+                                    </h3>
+                                    <div class="profile-public-review-date">
+                                        {{ review.data_criacao|date:"d/m/Y H:i" }}
+                                    </div>
+                                </div>
+
+                                {% if review.avaliacao %}
+                                    <div class="profile-public-rating">
+                                        {{ review.avaliacao }}/5
+                                    </div>
+                                {% endif %}
                             </div>
-                        {% endif %}
-                    </div>
 
-                    <div class="profile-public-comment">
-                        {{ review.comentario }}
-                    </div>
+                            <div class="profile-public-comment">{{ review.comentario }}</div>
 
-                    <div class="profile-public-review-actions">
-                        <a href="{% url 'detalhes_filme' filme_id=review.filme.id %}" class="btn btn-primary">
-                            Ver filme
-                        </a>
+                            <div class="profile-public-review-actions">
+                                <a href="{% url 'detalhes_filme' filme_id=review.filme.id %}" class="btn btn-primary">
+                                    Ver filme
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </article>
             {% endfor %}

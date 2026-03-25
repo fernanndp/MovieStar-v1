@@ -68,6 +68,8 @@ def listar_usuarios(request):
             "query": query,
         },
     )
+
+
 @login_required
 def reviews_recentes(request):
     reviews = (
@@ -89,7 +91,8 @@ def reviews_recentes(request):
             "comentario_forms": comentario_forms,
         },
     )
-    
+
+
 @login_required
 def perfil_publico(request, username):
     usuario = get_object_or_404(User, username=username)
@@ -129,6 +132,7 @@ def perfil_publico(request, username):
         },
     )
 
+
 @require_POST
 @login_required
 def comentar_review(request, review_id):
@@ -159,4 +163,57 @@ def comentar_review(request, review_id):
     )
 
     messages.success(request, "Comentário adicionado com sucesso.")
+    return redirect(next_url)
+
+
+@require_POST
+@login_required
+def editar_comentario_review(request, comentario_id):
+    comentario = get_object_or_404(
+        ComentarioReview.objects.select_related("usuario", "review"),
+        id=comentario_id,
+    )
+
+    if comentario.usuario != request.user:
+        messages.error(request, "Você só pode editar seus próprios comentários.")
+        next_url = request.POST.get("next_url") or reverse("reviews_recentes")
+        return redirect(next_url)
+
+    texto = request.POST.get(f"comentario-{comentario.id}-texto", "").strip()
+    next_url = request.POST.get("next_url") or reverse("reviews_recentes")
+
+    if not next_url.startswith("/"):
+        next_url = reverse("reviews_recentes")
+
+    if not texto:
+        messages.error(request, "O comentário não pode ficar vazio.")
+        return redirect(next_url)
+
+    comentario.texto = texto
+    comentario.save(update_fields=["texto", "data_atualizacao"])
+
+    messages.success(request, "Comentário editado com sucesso.")
+    return redirect(next_url)
+
+
+@require_POST
+@login_required
+def excluir_comentario_review(request, comentario_id):
+    comentario = get_object_or_404(
+        ComentarioReview.objects.select_related("usuario"),
+        id=comentario_id,
+    )
+
+    if comentario.usuario != request.user:
+        messages.error(request, "Você só pode excluir seus próprios comentários.")
+        next_url = request.POST.get("next_url") or reverse("reviews_recentes")
+        return redirect(next_url)
+
+    next_url = request.POST.get("next_url") or reverse("reviews_recentes")
+
+    if not next_url.startswith("/"):
+        next_url = reverse("reviews_recentes")
+
+    comentario.delete()
+    messages.success(request, "Comentário excluído com sucesso.")
     return redirect(next_url)

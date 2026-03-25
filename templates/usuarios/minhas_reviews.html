@@ -68,9 +68,7 @@
                             {% endif %}
                         </div>
 
-                        <div class="review-comment">
-                            {{ review.comentario }}
-                        </div>
+                        <div class="review-comment">{{ review.comentario }}</div>
 
                         <div class="review-actions">
                             <a href="{% url 'detalhes_filme' filme_id=review.filme.id %}" class="btn btn-primary">

@@ -20,6 +20,11 @@
 
 .recent-card {
     padding: 1.2rem;
+    display: block !important;
+}
+
+.recent-card > * {
+    width: 100%;
 }
 
 .recent-card-layout {
@@ -37,6 +42,7 @@
     background: rgba(255,255,255,0.05);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
+    align-self: start;
 }
 
 .recent-poster img {
@@ -60,6 +66,11 @@
 
 .recent-content {
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
 }
 
 .recent-top {
@@ -74,7 +85,7 @@
 .recent-user-block {
     display: flex;
     gap: 0.8rem;
-    align-items: center;
+    align-items: flex-start;
     min-width: 0;
 }
 
@@ -132,11 +143,26 @@
 }
 
 .recent-text {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 0 1rem 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
     color: #e5e7eb;
     line-height: 1.65;
     white-space: pre-wrap;
     word-break: break-word;
-    margin-bottom: 1rem;
+    overflow-wrap: anywhere;
+    text-align: left !important;
+    align-self: stretch !important;
+    justify-self: stretch !important;
+    place-self: auto !important;
+    position: static !important;
+    inset: auto !important;
 }
 
 .recent-actions {
@@ -144,6 +170,10 @@
     gap: 0.75rem;
     flex-wrap: wrap;
     margin-bottom: 1.2rem;
+}
+
+.recent-actions .btn {
+    width: fit-content;
 }
 
 .recent-comments {
@@ -159,14 +189,15 @@
 
 .recent-comments-list {
     display: grid;
-    gap: 0.8rem;
+    gap: 1rem;
     margin-bottom: 1rem;
 }
 
-.recent-comment-item {
-    display: flex;
-    gap: 0.7rem;
-    align-items: flex-start;
+.recent-comment-row {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 0.75rem;
+    align-items: start;
 }
 
 .recent-comment-avatar {
@@ -191,55 +222,51 @@
     display: block;
 }
 
-.recent-comment-body {
-    flex: 1;
+.recent-comment-content {
     min-width: 0;
+    width: 100%;
+    display: grid;
+    gap: 0.35rem;
+    justify-items: start;
+    align-items: start;
 }
 
-.recent-comment-top {
+.recent-comment-head {
+    width: 100%;
     display: flex;
-    align-items: center;
-    gap: 0.55rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
     flex-wrap: wrap;
-    margin-bottom: 0.25rem;
-    font-size: 0.92rem;
 }
 
-.recent-comment-top strong {
+.recent-comment-head strong {
     line-height: 1.3;
     word-break: break-word;
 }
 
-.recent-comment-top span {
+.recent-comment-head span {
     color: var(--muted);
     font-size: 0.84rem;
     line-height: 1.3;
+    white-space: nowrap;
 }
 
-.recent-comment-text {
+.recent-comment-message {
+    margin: 0;
+    padding: 0;
+    width: 100%;
     color: #d1d5db;
     line-height: 1.55;
     white-space: pre-wrap;
     word-break: break-word;
     overflow-wrap: anywhere;
+    text-align: left !important;
 }
 
 .recent-comments-empty {
     color: var(--muted);
     margin-bottom: 1rem;
-}
-
-.recent-comment-form {
-    display: grid;
-    gap: 0.75rem;
-}
-
-.recent-comment-form textarea {
-    width: 100%;
-}
-
-.recent-comment-form .btn {
-    width: fit-content;
 }
 
 .recent-empty {
@@ -254,6 +281,104 @@
 .recent-empty-text {
     color: var(--muted);
     line-height: 1.6;
+}
+
+.inline-form {
+    display: inline;
+    margin: 0;
+}
+
+.recent-comment-author-block {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.comment-edited-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.18rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.inline-form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.recent-comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 0.45rem;
+}
+
+.recent-comment-edit-box {
+    width: auto;
+}
+
+.recent-comment-edit-box summary {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.recent-comment-edit-box summary::-webkit-details-marker {
+    display: none;
+}
+
+.comment-action-link {
+    appearance: none;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.42rem 0.8rem;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition: 0.2s ease;
+    text-decoration: none;
+}
+
+.comment-action-link:hover {
+    background: rgba(255,255,255,0.12);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+.danger-link {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    color: #fecaca;
+}
+
+.danger-link:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.recent-comment-edit-form {
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 0.75rem;
+    width: 100%;
+}
+
+.recent-comment-edit-form textarea {
+    width: 100%;
+}
+
+.recent-comment-edit-form .btn {
+    width: fit-content;
 }
 
 @media (max-width: 700px) {
@@ -288,8 +413,12 @@
     }
 
     .recent-comment-top {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+}
+
+    .recent-comment-top span {
+        white-space: normal;
     }
 }

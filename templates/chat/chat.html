@@ -40,10 +40,10 @@
                 Voltar
             </a>
 
-           {% if mensagens_chat %}
+            {% if mensagens_chat %}
                 <form method="post"
-                    action="{% url 'excluir_conversa' conversa_id=conversa.id %}"
-                    onsubmit="return confirm('Tem certeza que deseja excluir esta conversa? Essa ação apagará todas as mensagens.');">
+                      action="{% url 'excluir_conversa' conversa_id=conversa.id %}"
+                      onsubmit="return confirm('Tem certeza que deseja excluir esta conversa? Essa ação apagará todas as mensagens.');">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">
                         Excluir conversa
@@ -58,7 +58,7 @@
     {% if mensagens_chat %}
         <div class="chat-messages" id="chat-messages">
             {% for mensagem in mensagens_chat %}
-                <div class="chat-row {% if mensagem.remetente == user %}mine{% else %}theirs{% endif %}">
+               <div class="chat-row {% if mensagem.remetente == user %}mine{% else %}theirs{% endif %}">
                     {% if mensagem.remetente != user %}
                         <div class="chat-message-avatar">
                             {% if mensagem.remetente.perfil.foto %}
@@ -69,34 +69,25 @@
                         </div>
                     {% endif %}
 
-                    <article class="chat-bubble {% if mensagem.remetente == user %}chat-bubble-mine{% else %}chat-bubble-theirs{% endif %}">
-                        <div class="chat-bubble-top">
-                            <span class="chat-sender">
-                                {% if mensagem.remetente == user %}
-                                    Você
-                                {% else %}
-                                    {{ mensagem.remetente.username }}
-                                {% endif %}
-                            </span>
-                            <span class="chat-time">
-                                {{ mensagem.criada_em|date:"d/m/Y H:i" }}
-                            </span>
-                        </div>
+                    <div class="chat-bubble-wrap">
+                        <div class="chat-bubble {% if mensagem.remetente == user %}chat-bubble-mine{% else %}chat-bubble-theirs{% endif %}">
+                            <div class="chat-bubble-top">
+                                <span class="chat-sender">
+                                    {% if mensagem.remetente == user %}
+                                        Você
+                                    {% else %}
+                                        @{{ mensagem.remetente.username }}
+                                    {% endif %}
+                                </span>
 
-                        <div class="chat-text">
-                            {{ mensagem.texto }}
-                        </div>
-                    </article>
+                                <span class="chat-time">
+                                    {{ mensagem.criada_em|date:"d/m/Y H:i" }}
+                                </span>
+                            </div>
 
-                    {% if mensagem.remetente == user %}
-                        <div class="chat-message-avatar">
-                            {% if user.perfil.foto %}
-                                <img src="{{ user.perfil.foto.url }}" alt="{{ user.username }}">
-                            {% else %}
-                                {{ user.username|first|upper }}
-                            {% endif %}
+                            <div class="chat-text">{{ mensagem.texto }}</div>
                         </div>
-                    {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         </div>

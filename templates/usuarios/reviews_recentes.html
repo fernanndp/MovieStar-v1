@@ -56,69 +56,109 @@
                             {% endif %}
                         </div>
 
-                        <div class="recent-text">
-                            {{ review.comentario }}
-                        </div>
+                        <div class="recent-text">{{ review.comentario }}</div>
 
                         <div class="recent-actions">
                             <a href="{% url 'detalhes_filme' filme_id=review.filme.id %}" class="btn btn-primary">
                                 Ver filme
                             </a>
 
-                            <a href="{% url 'perfil_publico' username=review.usuario.username %}" class="btn btn-secondary">
+                            <a href="{% url 'perfil_publico' username=review.usuario.username %}" class="btn btn-primary">
                                 Ver perfil
                             </a>
                         </div>
 
-                        <div class="recent-comments">
-                            <h3 class="recent-comments-title">Comentários</h3>
+                      <div class="recent-comments">
+                        <h3 class="recent-comments-title">Comentários</h3>
 
-                            {% if review.comentarios.all %}
-                                <div class="recent-comments-list">
-                                    {% for comentario in review.comentarios.all %}
-                                        <div class="recent-comment-item">
-                                            <div class="recent-comment-avatar">
-                                                {% if comentario.usuario.perfil.foto %}
-                                                    <img src="{{ comentario.usuario.perfil.foto.url }}" alt="{{ comentario.usuario.username }}">
-                                                {% else %}
-                                                    {{ comentario.usuario.username|first|upper }}
-                                                {% endif %}
-                                            </div>
-
-                                            <div class="recent-comment-body">
-                                                <div class="recent-comment-top">
-                                                    <strong>@{{ comentario.usuario.username }}</strong>
-                                                    <span>{{ comentario.data_criacao|date:"d/m/Y H:i" }}</span>
-                                                </div>
-
-                                                <div class="recent-comment-text">
-                                                    {{ comentario.texto }}
-                                                </div>
-                                            </div>
+                        {% if review.comentarios.all %}
+                            <div class="recent-comments-list">
+                                {% for comentario in review.comentarios.all %}
+                                    <div class="recent-comment-row">
+                                        <div class="recent-comment-avatar">
+                                            {% if comentario.usuario.perfil.foto %}
+                                                <img src="{{ comentario.usuario.perfil.foto.url }}" alt="{{ comentario.usuario.username }}">
+                                            {% else %}
+                                                {{ comentario.usuario.username|first|upper }}
+                                            {% endif %}
                                         </div>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                <div class="recent-comments-empty">
-                                    Nenhum comentário ainda.
-                                </div>
-                            {% endif %}
 
-                            {% if review.usuario != user %}
-                                <form method="post"
-                                      action="{% url 'comentar_review' review_id=review.id %}"
-                                      class="recent-comment-form">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="next_url" value="{{ request.path }}">
-                                    <textarea name="review-{{ review.id }}-texto"
-                                              rows="3"
-                                              placeholder="Escreva um comentário..."></textarea>
-                                    <button type="submit" class="btn btn-secondary">
-                                        Comentar
-                                    </button>
-                                </form>
-                            {% endif %}
-                        </div>
+                                        <div class="recent-comment-content">
+                                            <div class="recent-comment-head">
+                                                <div class="recent-comment-author-block">
+                                                    <strong>@{{ comentario.usuario.username }}</strong>
+
+                                                    {% if comentario.data_atualizacao and comentario.data_atualizacao != comentario.data_criacao %}
+                                                        <span class="comment-edited-badge">editado</span>
+                                                    {% endif %}
+                                                </div>
+
+                                                <span>
+                                                    {{ comentario.data_criacao|date:"d/m/Y H:i" }}
+                                                    {% if comentario.data_atualizacao and comentario.data_atualizacao != comentario.data_criacao %}
+                                                        • editado em {{ comentario.data_atualizacao|date:"d/m/Y H:i" }}
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+
+                                            <p class="recent-comment-message">{{ comentario.texto }}</p>
+
+                                            {% if comentario.usuario == user %}
+                                                <div class="recent-comment-actions">
+                                                    <details class="recent-comment-edit-box">
+                                                        <summary class="comment-action-link">Editar</summary>
+
+                                                        <form method="post"
+                                                            action="{% url 'editar_comentario_review' comentario_id=comentario.id %}"
+                                                            class="recent-comment-edit-form">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="next_url" value="{{ request.path }}">
+                                                            <textarea name="comentario-{{ comentario.id }}-texto"
+                                                                    rows="3"
+                                                                    required>{{ comentario.texto }}</textarea>
+                                                            <button type="submit" class="btn btn-secondary">
+                                                                Salvar edição
+                                                            </button>
+                                                        </form>
+                                                    </details>
+
+                                                    <form method="post"
+                                                        action="{% url 'excluir_comentario_review' comentario_id=comentario.id %}"
+                                                        class="inline-form"
+                                                        onsubmit="return confirm('Tem certeza que deseja excluir este comentário?');">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="next_url" value="{{ request.path }}">
+                                                        <button type="submit" class="comment-action-link danger-link">
+                                                            Excluir
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="recent-comments-empty">
+                                Nenhum comentário ainda.
+                            </div>
+                        {% endif %}
+
+                        {% if review.usuario != user %}
+                            <form method="post"
+                                action="{% url 'comentar_review' review_id=review.id %}"
+                                class="recent-comment-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next_url" value="{{ request.path }}">
+                                <textarea name="review-{{ review.id }}-texto"
+                                        rows="3"
+                                        placeholder="Escreva um comentário..."></textarea>
+                                <button type="submit" class="btn btn-secondary">
+                                    Comentar
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
                     </div>
                 </div>
             </article>

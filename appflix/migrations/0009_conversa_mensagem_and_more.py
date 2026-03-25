@@ -50,6 +50,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='conversa',
-            constraint=models.CheckConstraint(condition=models.Q(('user1', models.F('user2')), _negated=True), name='check_conversa_nao_permite_mesmo_usuario'),
+            constraint=models.CheckConstraint(check=models.Q(('user1', models.F('user2')), _negated=True), name='check_conversa_nao_permite_mesmo_usuario'),
         ),
     ]

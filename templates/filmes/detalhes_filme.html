@@ -2,9 +2,11 @@
 {% load static %}
 
 {% block title %}{{ filme.title }} | MovieStar{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/detalhes-filme.css' %}">
 {% endblock %}
+
 {% block content %}
 <section class="movie-hero {% if filme.backdrop_path %}has-backdrop{% endif %}">
     <div class="movie-hero-content">
@@ -59,44 +61,42 @@
 
         {% if reviews %}
             <div class="review-list">
-               {% for review in reviews %}
-                <article class="review-card">
-                    <div class="review-top">
-                        <div class="review-user-block">
-                            <div class="review-user-avatar">
-                                {% if review.usuario.perfil.foto %}
-                                    <img src="{{ review.usuario.perfil.foto.url }}" alt="{{ review.usuario.username }}">
-                                {% else %}
-                                    {{ review.usuario.username|first|upper }}
-                                {% endif %}
-                            </div>
+                {% for review in reviews %}
+                    <article class="review-card">
+                        <div class="review-top">
+                            <div class="review-user-block">
+                                <div class="review-user-avatar">
+                                    {% if review.usuario.perfil.foto %}
+                                        <img src="{{ review.usuario.perfil.foto.url }}" alt="{{ review.usuario.username }}">
+                                    {% else %}
+                                        {{ review.usuario.username|first|upper }}
+                                    {% endif %}
+                                </div>
 
-                            <div>
-                                <div class="review-user">{{ review.usuario.username }}</div>
-                                <div class="review-date">
-                                    {{ review.data_criacao|date:"d/m/Y H:i" }}
+                                <div class="review-user-meta">
+                                    <div class="review-user">{{ review.usuario.username }}</div>
+                                    <div class="review-date">
+                                        {{ review.data_criacao|date:"d/m/Y H:i" }}
+                                    </div>
                                 </div>
                             </div>
+
+                            {% if review.avaliacao %}
+                                <div class="review-rating">
+                                    {{ review.avaliacao }}/5
+                                </div>
+                            {% endif %}
                         </div>
 
-                        {% if review.avaliacao %}
-                            <div class="review-rating">
-                                {{ review.avaliacao }}/5
-                            </div>
-                        {% endif %}
-                    </div>
+                        <div class="review-comment">{{ review.comentario }}</div>
 
-                    <div class="review-comment">
-                        {{ review.comentario }}
-                    </div>
-
-                    <div class="review-comments">
+                   <div class="review-comments">
                         <h4 class="review-comments-title">Comentários</h4>
 
                         {% if review.comentarios.all %}
                             <div class="review-comments-list">
                                 {% for comentario in review.comentarios.all %}
-                                    <div class="review-comment-item">
+                                    <div class="review-comment-row">
                                         <div class="review-comment-avatar">
                                             {% if comentario.usuario.perfil.foto %}
                                                 <img src="{{ comentario.usuario.perfil.foto.url }}" alt="{{ comentario.usuario.username }}">
@@ -105,15 +105,57 @@
                                             {% endif %}
                                         </div>
 
-                                        <div class="review-comment-body">
-                                            <div class="review-comment-top">
-                                                <strong>@{{ comentario.usuario.username }}</strong>
-                                                <span>{{ comentario.data_criacao|date:"d/m/Y H:i" }}</span>
+                                        <div class="review-comment-content">
+                                            <div class="review-comment-head">
+                                                <div class="review-comment-author-block">
+                                                    <strong>@{{ comentario.usuario.username }}</strong>
+
+                                                    {% if comentario.data_atualizacao and comentario.data_atualizacao != comentario.data_criacao %}
+                                                        <span class="comment-edited-badge">editado</span>
+                                                    {% endif %}
+                                                </div>
+
+                                                <span>
+                                                    {{ comentario.data_criacao|date:"d/m/Y H:i" }}
+                                                    {% if comentario.data_atualizacao and comentario.data_atualizacao != comentario.data_criacao %}
+                                                        • editado em {{ comentario.data_atualizacao|date:"d/m/Y H:i" }}
+                                                    {% endif %}
+                                                </span>
                                             </div>
 
-                                            <div class="review-comment-text">
-                                                {{ comentario.texto }}
-                                            </div>
+                                            <p class="review-comment-message">{{ comentario.texto }}</p>
+
+                                            {% if comentario.usuario == user %}
+                                                <div class="review-comment-actions">
+                                                    <details class="review-comment-edit-box">
+                                                        <summary class="comment-action-link">Editar</summary>
+
+                                                        <form method="post"
+                                                            action="{% url 'editar_comentario_review' comentario_id=comentario.id %}"
+                                                            class="review-comment-edit-form">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="next_url" value="{{ request.path }}">
+                                                            <textarea name="comentario-{{ comentario.id }}-texto"
+                                                                    rows="3"
+                                                                    required>{{ comentario.texto }}</textarea>
+                                                            <button type="submit" class="btn btn-secondary">
+                                                                Salvar edição
+                                                            </button>
+                                                        </form>
+                                                    </details>
+
+                                                    <form method="post"
+                                                        action="{% url 'excluir_comentario_review' comentario_id=comentario.id %}"
+                                                        class="inline-form"
+                                                        onsubmit="return confirm('Tem certeza que deseja excluir este comentário?');">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="next_url" value="{{ request.path }}">
+                                                        <button type="submit" class="comment-action-link danger-link">
+                                                            Excluir
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -139,8 +181,8 @@
                             </form>
                         {% endif %}
                     </div>
-                </article>
-            {% endfor %}
+                 </article>
+                {% endfor %}
             </div>
         {% else %}
             <div class="empty-reviews">
@@ -149,7 +191,7 @@
         {% endif %}
     </section>
 
-    <aside class="card section-card">
+    <aside class="card section-card trailer-section">
         <h2 class="section-title">Trailer</h2>
         <p class="section-subtitle">
             Assista ao trailer oficial, quando disponível.
@@ -158,12 +200,12 @@
         {% if filme.trailer_key %}
             <div class="trailer-box">
                 <iframe
-                        src="https://www.youtube-nocookie.com/embed/{{ filme.trailer_key }}"
-                        title="Trailer de {{ filme.title }}"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen>
-                    </iframe>
+                    src="https://www.youtube-nocookie.com/embed/{{ filme.trailer_key }}"
+                    title="Trailer de {{ filme.title }}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                </iframe>
             </div>
         {% else %}
             <div class="empty-reviews">

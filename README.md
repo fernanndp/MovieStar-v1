@@ -45,7 +45,7 @@ O projeto começou como uma aplicação simples de filmes e evoluiu para uma exp
 - Responsividade para desktop e mobile
 
 ### Observação
-
+---
 O chat implementado neste projeto **não é em tempo real**.  
 As mensagens são enviadas e exibidas por meio de requisições HTTP tradicionais, sem uso de WebSockets.
 ---
